@@ -1,17 +1,9 @@
-# DuinoMinerUmbrelPatch
+# DuinoMiner Umbrel Patch
 
 ## Overview
-This repository is part of the TwilightOnSol ecosystem. It has been audited and refactored for better performance and maintainability.
+A specialized fork of the DuinoCoin (DUCO) miner, specifically patched for compatibility and performance on Umbrel OS and Raspberry Pi environments.
 
-## Project Structure
-- AVR_Miner
-- AVR_Miner.py
-- PC_Miner.py
-- README.md
-- requirements.txt
-- run_avr_miner.sh
-- Manus AI feedback & overview
-- Tools/duco-install-rpi.sh
-- Tools/linux-device-paths
-- Tools/update.sh
-- ...
+## Features
+- **Umbrel Compatibility**: Patched to run seamlessly within the Umbrel ecosystem.
+- **Multi-Device Support**: Includes miners for both PC and AVR (Arduino) devices.
+- **Automation Scripts**: Easy installation and update scripts for Linux/Raspberry Pi.
