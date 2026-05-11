@@ -9,7 +9,7 @@ Duino-Coin Team & Community 2019-2024
 from os import _exit, mkdir
 from os import name as osname
 from os import path
-from os import system as ossystem 
+from os import system as ossystem
 from platform import machine as osprocessor
 from platform import system
 import sys
@@ -194,7 +194,7 @@ def check_updates():
                     pretty_print("sys0", "Config won't be carried to the next version", "warning")
 
                 if not os.path.exists(Settings.TEMP_FOLDER): # Make the Temp folder
-                    os.makedirs(Settings.TEMP_FOLDER) 
+                    os.makedirs(Settings.TEMP_FOLDER)
 
                 file_path = os.path.join(Settings.TEMP_FOLDER, zip_file)
                 download_url = "https://github.com/revoxhere/duino-coin/releases/download/" + data["tag_name"] + "/" + zip_file
@@ -202,15 +202,15 @@ def check_updates():
                 if running_script:
                     file_path = os.path.join(".", "AVR_Miner_"+data["tag_name"]+".py")
                     download_url = "https://raw.githubusercontent.com/revoxhere/duino-coin/master/AVR_Miner.py"
-                    
+
                 r = requests.get(download_url, stream=True)
                 if r.ok:
                     start = time()
                     dl = 0
                     file_size = int(r.headers["Content-Length"]) # Get file size
-                    pretty_print("sys0", 
+                    pretty_print("sys0",
                         f"Saving update to: {os.path.abspath(file_path)}", "warning")
-                    with open(file_path, 'wb') as f: 
+                    with open(file_path, 'wb') as f:
                         for chunk in r.iter_content(chunk_size=1024 * 8): # Download file in chunks
                             if chunk:
                                 dl += len(chunk)
@@ -223,8 +223,8 @@ def check_updates():
 
                                 sys.stdout.write(
                                     "\r%s [%s%s] %s %s" % (
-                                        dl_perc + "%", 
-                                        '#' * done, 
+                                        dl_perc + "%",
+                                        '#' * done,
                                         ' ' * (50-done),
                                         str(round(os.path.getsize(file_path) / 1024 / 1024, 2)) + " MB ",
                                         str((dl // (time() - start)) // 1024) + " KB/s")) # ProgressBar
@@ -241,7 +241,7 @@ def check_updates():
                                     if sys.platform == "win32":
                                         file.filename = "AVR_Miner_"+data["tag_name"]+".exe" # Rename the file
                                     else:
-                                        file.filename = "AVR_Miner_"+data["tag_name"] 
+                                        file.filename = "AVR_Miner_"+data["tag_name"]
                                     zip_ref.extract(file, ".")
                         pretty_print("sys0", "Unpacking complete", "success")
                         os.remove(file_path) # Delete the zip file
@@ -250,7 +250,7 @@ def check_updates():
                         if sys.platform == "win32":
                             os.startfile(os.getcwd() + "\\AVR_Miner_"+data["tag_name"]+".exe") # Start the miner
                         else: # os.startfile is only for windows
-                            os.system(os.getcwd() + "/AVR_Miner_"+data["tag_name"]) 
+                            os.system(os.getcwd() + "/AVR_Miner_"+data["tag_name"])
                     else:
                         if sys.platform == "win32":
                             os.system(file_path)
@@ -383,7 +383,7 @@ class Client:
 
                     NODE_ADDRESS = response["ip"]
                     NODE_PORT = response["port"]
-                    
+
                     return (NODE_ADDRESS, NODE_PORT)
 
                 elif "message" in response:
@@ -663,7 +663,7 @@ def load_config():
             if not username:
                 username = choice(["revox", "Bilaboz"])
 
-            r = requests.get(f"https://server.duinocoin.com/users/{username}", 
+            r = requests.get(f"https://server.duinocoin.com/users/{username}",
                              timeout=Settings.SOC_TIMEOUT).json()
             correct_username = r["success"]
             if not correct_username:
@@ -852,7 +852,7 @@ def greeting():
         Style.DIM + Fore.MAGENTA
         + Settings.BLOCK + Style.NORMAL
         + Fore.RESET + get_string("using_config")
-        + Style.BRIGHT + Fore.YELLOW 
+        + Style.BRIGHT + Fore.YELLOW
         + str(Settings.DATA_DIR + '/Settings.cfg'))
 
     print(
@@ -922,7 +922,7 @@ def pretty_print(sender: str = "sys0",
     else:
         fg_color = Fore.YELLOW
 
-    
+
     print_queue.append(Fore.RESET + datetime.now().strftime(Style.DIM + "%H:%M:%S ")
               + Style.RESET_ALL + Fore.WHITE + bg_color + Style.BRIGHT + f" {sender} "
               + Style.RESET_ALL + " " + fg_color + msg.strip())
@@ -952,7 +952,7 @@ def share_print(id, type, accept, reject, thread_hashrate,
     print_queue.append(
           Fore.RESET + datetime.now().strftime(Style.DIM + "%H:%M:%S ")
           + Style.RESET_ALL + Fore.WHITE + Style.BRIGHT + Back.MAGENTA
-          + " avr" + str(id) + " " + Style.RESET_ALL + fg_color 
+          + " avr" + str(id) + " " + Style.RESET_ALL + fg_color
           + Settings.PICK + share_str + Fore.RESET
           + str(accept) + "/" + str(accept + reject) + Fore.MAGENTA
           + " (" + str(round(accept / (accept + reject) * 100)) + "%)"
@@ -1094,7 +1094,7 @@ def mine_avr(com, threadid, fastest_pool, thread_rigid):
                      f"Can't start mining on {com}" + Fore.RESET
                      + f" - board keeps responding improperly. "
                      + "Check if the code has been uploaded correctly "
-                     + "and your device is supported by Duino-Coin.", 
+                     + "and your device is supported by Duino-Coin.",
                      'error')
             break
 
@@ -1106,11 +1106,11 @@ def mine_avr(com, threadid, fastest_pool, thread_rigid):
         elif hashrate_test > 380:
             start_diff = "MEGA"
 
-        pretty_print('sys' + port_num(com), 
-                    get_string('hashrate_test') 
+        pretty_print('sys' + port_num(com),
+                    get_string('hashrate_test')
                     + get_prefix("H/s", hashrate_test, 2)
                     + Fore.RESET + Style.BRIGHT
-                    + get_string('hashrate_test_diff') 
+                    + get_string('hashrate_test_diff')
                     + start_diff)
 
         while True:
@@ -1242,12 +1242,12 @@ def mine_avr(com, threadid, fastest_pool, thread_rigid):
             elif feedback[0] == 'BAD':
                 shares[1] += 1
                 share_print(port_num(com), "reject",
-                            shares[0], shares[1], hashrate, total_hashrate, 
+                            shares[0], shares[1], hashrate, total_hashrate,
                             computetime, diff, ping, feedback[1])
 
             else:
                 share_print(port_num(com), "reject",
-                            shares[0], shares[1], hashrate, total_hashrate, 
+                            shares[0], shares[1], hashrate, total_hashrate,
                             computetime, diff, ping, feedback)
 
             if shares[0] % 100 == 0 and shares[0] > 1:
@@ -1307,7 +1307,7 @@ def calculate_uptime(start_time):
     elif uptime >= 60: # 1 minute, not plural
         return str(uptime // 60) + get_string('uptime_minute')
     else: # less than 1 minute
-        return str(round(uptime)) + get_string('uptime_seconds')    
+        return str(round(uptime)) + get_string('uptime_seconds')
 
 
 print_queue = []

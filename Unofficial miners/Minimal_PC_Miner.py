@@ -76,7 +76,7 @@ while True:
 
             # Receive work
             job = soc.recv(1024).decode().rstrip("\n")
-            # Split received data to job and difficulty 
+            # Split received data to job and difficulty
             job = job.split(",")
             difficulty = job[2]
 

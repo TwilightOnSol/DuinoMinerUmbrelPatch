@@ -18,7 +18,7 @@ from random import randint
 
 from os import execl, mkdir, _exit
 from os import name as osname
-from os import system as ossystem 
+from os import system as ossystem
 from subprocess import DEVNULL, Popen, check_call, PIPE
 import pip
 import sys
@@ -62,10 +62,10 @@ def handler(signal_received, frame):
             + Fore.RESET
             + get_string("goodbye"),
             "warning")
-    
+
     if not "raspi_leds" in user_settings:
         user_settings["raspi_leds"] = "y"
-    
+
     if running_on_rpi and user_settings["raspi_leds"] == "y":
         # Reset onboard status LEDs
         os.system(
@@ -75,7 +75,7 @@ def handler(signal_received, frame):
 
     if sys.platform == "win32":
         _exit(0)
-    else: 
+    else:
         Popen("kill $(ps aux | grep PC_Miner | awk '{print $2}')",
               shell=True, stdout=PIPE)
 
@@ -126,13 +126,13 @@ except ModuleNotFoundError:
           + "python3 -m pip install py-cpuinfo")
     install("py-cpuinfo")
 
-try:    
-    import psutil   
-except ModuleNotFoundError: 
-    print("Psutil is not installed. "   
-          + "Miner will try to automatically install it "   
-          + "If it fails, please manually execute " 
-          + "python3 -m pip install psutil")    
+try:
+    import psutil
+except ModuleNotFoundError:
+    print("Psutil is not installed. "
+          + "Miner will try to automatically install it "
+          + "If it fails, please manually execute "
+          + "python3 -m pip install psutil")
     install("psutil")
 
 try:
@@ -262,17 +262,17 @@ def check_updates():
                     with open(str(DATA_DIR) # save it on the new version folder
                             + '/Settings.cfg', 'w') as configfile:
                         configparser.write(configfile)
-                    
-                    pretty_print(Style.RESET_ALL + get_string('config_saved'), 
+
+                    pretty_print(Style.RESET_ALL + get_string('config_saved'),
                                  "success", "sys0")
                 except Exception as e:
-                    pretty_print(f"Error saving configfile: {e}" + str(e), 
+                    pretty_print(f"Error saving configfile: {e}" + str(e),
                                  "error", "sys0")
                     pretty_print("Config won't be carried to the next version",
                                  "warning", "sys0")
 
                 if not os.path.exists(Settings.TEMP_FOLDER): # Make the Temp folder
-                    os.makedirs(Settings.TEMP_FOLDER) 
+                    os.makedirs(Settings.TEMP_FOLDER)
 
                 file_path = os.path.join(Settings.TEMP_FOLDER, zip_file)
                 download_url = "https://github.com/revoxhere/duino-coin/releases/download/" + data["tag_name"] + "/" + zip_file
@@ -280,7 +280,7 @@ def check_updates():
                 if running_script:
                     file_path = os.path.join(".", "PC_Miner_"+data["tag_name"]+".py")
                     download_url = "https://raw.githubusercontent.com/revoxhere/duino-coin/master/PC_Miner.py"
-                    
+
                 r = requests.get(download_url, stream=True)
                 if r.ok:
                     start = time()
@@ -288,7 +288,7 @@ def check_updates():
                     file_size = int(r.headers["Content-Length"]) # Get file size
                     pretty_print(f"Saving update to: {os.path.abspath(file_path)}",
                                  "warning", "sys0")
-                    with open(file_path, 'wb') as f: 
+                    with open(file_path, 'wb') as f:
                         for chunk in r.iter_content(chunk_size=1024 * 8): # Download file in chunks
                             if chunk:
                                 dl += len(chunk)
@@ -301,8 +301,8 @@ def check_updates():
 
                                 sys.stdout.write(
                                     "\r%s [%s%s] %s %s" % (
-                                        dl_perc + "%", 
-                                        '#' * done, 
+                                        dl_perc + "%",
+                                        '#' * done,
                                         ' ' * (50-done),
                                         str(round(os.path.getsize(file_path) / 1024 / 1024, 2)) + " MB ",
                                         str((dl // (time() - start)) // 1024) + " KB/s")) # ProgressBar
@@ -319,7 +319,7 @@ def check_updates():
                                     if sys.platform == "win32":
                                         file.filename = "PC_Miner_"+data["tag_name"]+".exe" # Rename the file
                                     else:
-                                        file.filename = "PC_Miner_"+data["tag_name"] 
+                                        file.filename = "PC_Miner_"+data["tag_name"]
                                     zip_ref.extract(file, ".")
                         pretty_print("Unpacking complete", "success", "sys0")
                         os.remove(file_path) # Delete the zip file
@@ -328,7 +328,7 @@ def check_updates():
                         if sys.platform == "win32":
                             os.startfile(os.getcwd() + "\\PC_Miner_"+data["tag_name"]+".exe") # Start the miner
                         else: # os.startfile is only for windows
-                            os.system(os.getcwd() + "/PC_Miner_"+data["tag_name"]) 
+                            os.system(os.getcwd() + "/PC_Miner_"+data["tag_name"])
                     else:
                         if sys.platform == "win32":
                             os.system(file_path)
@@ -561,7 +561,7 @@ def periodic_report(start_time, end_time, shares,
     Displays nicely formated uptime stats
     """
     raspi_iot_reading = ""
-    
+
     if running_on_rpi and user_settings["raspi_cpu_iot"] == "y":
         raspi_iot_reading = f"{get_string('rpi_cpu_temp')} {get_rpi_temperature()}°C"
 
@@ -600,7 +600,7 @@ def calculate_uptime(start_time):
     elif uptime >= 60: # 1 minute, not plural
         return str(uptime // 60) + get_string('uptime_minute')
     else: # less than 1 minute
-        return str(round(uptime)) + get_string('uptime_seconds')   
+        return str(round(uptime)) + get_string('uptime_seconds')
 
 
 def pretty_print(msg: str = None,
@@ -666,7 +666,7 @@ def share_print(id, type,
             sleep(0.1)
             os.system(
                 'echo 0 | sudo tee /sys/class/leds/led1/brightness >/dev/null 2>&1')
-    
+
     if type == "accept":
         if running_on_rpi and user_settings["raspi_leds"] == "y":
             _blink_builtin()
@@ -761,7 +761,7 @@ def check_mining_key(user_settings):
             "w") as configfile:
             configparser.write(configfile)
             print(Style.RESET_ALL + get_string("config_saved"))
-        sleep(1.5)   
+        sleep(1.5)
         return
 
     if not response["success"]:
@@ -925,7 +925,7 @@ class Miner:
                 if locale.startswith("zh_TW"):
                     lang = "chinese_Traditional"
                 elif locale.startswith("zh"):
-                    lang = "chinese_simplified"                
+                    lang = "chinese_simplified"
                 elif locale.startswith("th"):
                     lang = "thai"
                 elif locale.startswith("ko"):
@@ -954,7 +954,7 @@ class Miner:
         Loads miner settings file or starts the config tool
         """
         if not Path(Settings.DATA_DIR + Settings.SETTINGS_FILE).is_file():
-            print(Style.BRIGHT 
+            print(Style.BRIGHT
                   + get_string("basic_config_tool")
                   + Settings.DATA_DIR
                   + get_string("edit_config_file_warning")
@@ -972,7 +972,7 @@ class Miner:
                 if not username:
                     username = choice(["revox", "Bilaboz"])
 
-                r = requests.get(f"https://server.duinocoin.com/users/{username}", 
+                r = requests.get(f"https://server.duinocoin.com/users/{username}",
                              timeout=Settings.SOC_TIMEOUT).json()
                 correct_username = r["success"]
                 if not correct_username:
@@ -980,8 +980,8 @@ class Miner:
 
             mining_key = "None"
             if has_mining_key(username):
-                mining_key = input(Style.RESET_ALL + 
-                                    get_string("ask_mining_key") + 
+                mining_key = input(Style.RESET_ALL +
+                                    get_string("ask_mining_key") +
                                     Style.BRIGHT)
                 mining_key = b64.b64encode(mining_key.encode("utf-8")).decode('utf-8')
 
@@ -1007,8 +1007,8 @@ class Miner:
 
             if int(threads) > 16:
                 threads = 16
-                print(Style.BRIGHT + Fore.BLUE 
-                        + get_string("max_threads_notice") 
+                print(Style.BRIGHT + Fore.BLUE
+                        + get_string("max_threads_notice")
                         + Style.RESET_ALL)
             elif int(threads) < 1:
                 threads = 1
@@ -1143,9 +1143,9 @@ class Miner:
                 Miner.m_connect(id, pool)
                 while True:
                     try:
-                        if user_settings["mining_key"] != "None":   
-                            key = b64.b64decode(user_settings["mining_key"]).decode('utf-8')    
-                        else:   
+                        if user_settings["mining_key"] != "None":
+                            key = b64.b64decode(user_settings["mining_key"]).decode('utf-8')
+                        else:
                             key = user_settings["mining_key"]
 
                         raspi_iot_reading = ""
@@ -1203,7 +1203,7 @@ class Miner:
                                     prep_identifier += " - RPi"
                                 else:
                                     prep_identifier = "Raspberry Pi"
-                                    
+
                             while True:
                                 Client.send(f"{result[0]}"
                                             + Settings.SEPARATOR
@@ -1297,7 +1297,7 @@ class Discord_rp:
                 get_string("discord_launch_error") +
                 Style.NORMAL + Fore.RESET + " " + str(e),
                 "warning")
-          
+
 
     def update():
         while True:
@@ -1427,12 +1427,12 @@ if __name__ == "__main__":
 
     Fasthash.load()
     Fasthash.init()
-    
+
     if not "raspi_leds" in user_settings:
         user_settings["raspi_leds"] = "y"
     if not "raspi_cpu_iot" in user_settings:
         user_settings["raspi_cpu_iot"] = "y"
-    
+
     if user_settings["raspi_leds"] == "y":
         try:
             with io.open('/sys/firmware/devicetree/base/model', 'r') as m:
@@ -1462,7 +1462,7 @@ if __name__ == "__main__":
         except Exception as e:
             print(e)
             user_settings["raspi_cpu_iot"] = "n"
-    
+
     try:
         check_mining_key(user_settings)
     except Exception as e:
@@ -1494,7 +1494,7 @@ if __name__ == "__main__":
         p = Process(target=Miner.mine,
                     args=[i, user_settings, blocks,
                           fastest_pool, accept, reject,
-                          hashrate, single_miner_id, 
+                          hashrate, single_miner_id,
                           print_queue])
         p_list.append(p)
         p.start()

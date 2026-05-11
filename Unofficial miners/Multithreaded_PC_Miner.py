@@ -56,21 +56,21 @@ hash_mean = []
 
 def hashrateCalculator():
     global last_hash_count, hash_count, khash_count, hash_mean
-    
+
     last_hash_count = hash_count
     khash_count = last_hash_count / 1000
     if khash_count == 0:
         khash_count = random.uniform(0, 1)
-    
+
     hash_mean.append(khash_count)
     khash_count = statistics.mean(hash_mean)
     khash_count = round(khash_count, 2)
-  
+
     hash_count = 0
-  
+
     threading.Timer(1.0, hashrateCalculator).start()
 
-    
+
 def start_thread(arr, i, username, accepted_shares, bad_shares, thread_number):
     global hash_count, khash_count
     soc = socket.socket()
@@ -121,7 +121,7 @@ def start_thread(arr, i, username, accepted_shares, bad_shares, thread_number):
 
 def autorestarter():
     time.sleep(autorestart_time)
-    
+
     for p in multiprocessing.active_children():
         p.terminate()
     time.sleep(1)
@@ -136,22 +136,22 @@ def getBalance():
     soc.recv(3).decode()
 
     soc.send(bytes("LOGI," + username + "," + password, encoding="utf8"))
-    response = soc.recv(2).decode()           
+    response = soc.recv(2).decode()
     if response != "OK":
         print("Error logging in - check account credentials!")
         soc.close()
         os._exit(1)
-        
+
     soc.send(bytes("BALA", encoding="utf8"))
     balance = soc.recv(1024).decode()
     soc.close()
-    
+
     return float(balance)
 
 
 def calculateProfit(start_bal):
     global curr_bal, profit_array
-    
+
     prev_bal = curr_bal
 
     curr_bal = getBalance()
@@ -170,13 +170,13 @@ def showOutput():
         print(Back.CYAN + Fore.YELLOW + "Duino-Coin Multithreaded PC Miner" + Style.RESET_ALL + "\n")
     else:
         print(bcolors.back_cyan + bcolors.yellow + "Duino-Coin Multithreaded PC Miner" + bcolors.endc + "\n")
-    
-    
+
+
     if colorama_choice:
         print(Back.YELLOW + Fore.BLACK + "Profit: " + str(profit_array[1]) + "/min   " + str(profit_array[2]) + "/h" + "\nTotal session: " + str(profit_array[0]) + Style.RESET_ALL + "\n")
     else:
         print(bcolors.back_yellow + bcolors.black + "Profit: " + str(profit_array[1]) + "/min   " + str(profit_array[2]) + "/h" + "\nTotal session: " + str(profit_array[0]) + bcolors.endc + "\n")
-    
+
     d = {}
     for thread in range(thread_number):
         d[f"#{thread + 1}"] = [f"{hashrate_array[thread]} kH/s", accepted_shares[thread], bad_shares[thread]]
@@ -191,14 +191,14 @@ def showOutput():
             print(Fore.CYAN + "{:<9} {:<13} {:<10} {:<10}".format(k, hashrate, good, bad) + Style.RESET_ALL)
         else:
             print(bcolors.blue + "{:<9} {:<13} {:<10} {:<10}".format(k, hashrate, good, bad) + bcolors.endc)
-    
+
     if colorama_choice:
         print(Back.RED + "{:<9} {:<13} {:<10} {:<10}".format("TOTAL", totalHashrate(sum(hashrate_array)), sum(accepted_shares), sum(bad_shares)) + Style.RESET_ALL)
     else:
         print(bcolors.back_red + "{:<9} {:<13} {:<10} {:<10}".format("TOTAL", totalHashrate(sum(hashrate_array)), sum(accepted_shares), sum(bad_shares)) + bcolors.endc)
 
     threading.Timer(float(refresh_time), showOutput).start()
-        
+
 
 def clear():
     os.system('cls' if os.name=='nt' else 'clear')
@@ -224,7 +224,7 @@ if __name__ == '__main__':
         print(Fore.RED + "The profit is refreshed every 60 seconds" + Style.RESET_ALL)
     else:
         print(bcolors.red + "The profit is refreshed every 60 seconds" + bcolors.endc)
-    
+
     if (autorestart_time) > 0:
         threading.Thread(target=autorestarter).start()
 
@@ -232,7 +232,7 @@ if __name__ == '__main__':
         content = content.read().decode().splitlines() # doing this here because can't access pool_address and pool_port in the threads
     pool_address = content[0]
     pool_port = content[1]
-    
+
     arguments = len(sys.argv)
     if arguments <= 3:
         if colorama_choice:
@@ -267,4 +267,4 @@ if __name__ == '__main__':
         p.start()
         time.sleep(0.5)
     time.sleep(1)
-    
+
