@@ -10,8 +10,8 @@ This repository is part of the TwilightOnSol ecosystem. It has been audited and 
 - README.md
 - requirements.txt
 - run_avr_miner.sh
+- Manus AI feedback & overview
 - Tools/duco-install-rpi.sh
 - Tools/linux-device-paths
 - Tools/update.sh
-- Tools/upload-sketch.py
 - ...
